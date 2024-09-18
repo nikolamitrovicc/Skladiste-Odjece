@@ -283,14 +283,9 @@ void kreiranjeDat()
 
 int generiranjeID()
 {
-	static int brojac = 0;
-	time_t trenutnoVrijeme;
-
-	time(&trenutnoVrijeme);
-
-	int ID = (int)trenutnoVrijeme + brojac;
+	static int brojac = 1;
+	int ID = brojac;
 	brojac++;
-
 	return ID;
 }
 
