@@ -178,11 +178,11 @@ int menuPretrazivanja()
 	polje = (PROIZVOD*)ucitavanjeProizvoda();
 
 	printf("\nPretrazivanje po:\n");
-	printf("| 1. ID-u						|\n");
-	printf("| 2. Imenu tvrtke/marke			|\n");
-	printf("| 3. Imenu proizvode			|\n");
-	printf("| 4. Cijeni					    |\n");
-	printf("| 5. Povratak					|\n");
+	printf("| 1. ID-u               |\n");
+	printf("| 2. Imenu tvrtke/marke |\n");
+	printf("| 3. Imenu proizvode    |\n");
+	printf("| 4. Cijeni             |\n");
+	printf("| 5. Povratak           |\n");
 
 	scanf("%d", &izbor);
 	if (izbor != 1)
