@@ -18,6 +18,7 @@ enum menu
 	SORTIRANJE_CIJENA = 4,
 	BRISANJE_PROIZVODA = 5,
 	EXIT_3 = 6,
+	AZURIRANJE_PROIZVODA = 7,
 };
 enum menuPretrazivanje
 {
@@ -42,6 +43,7 @@ int menuSortiranja();
 int generiranjeID();
 void dodavanjeProizvoda();
 void* ucitavanjeProizvoda();
+void azuriranjeProizvoda(PROIZVOD* polje);
 void ispis(PROIZVOD*);
 void* pretrazivanjeID(PROIZVOD*);
 void* pretrazivanjeMarka(PROIZVOD*);
