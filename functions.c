@@ -10,7 +10,6 @@ static int brojac = 0;
 static int i, j;
 int praviBrojProizvoda = 0;
 
-// Izbornik / podizbornici
 int menu()
 {
 	int izbor = 0;
@@ -24,6 +23,7 @@ int menu()
 	printf("| 4.	Sortiranje proizvoda po cijeni  |\n");
 	printf("| 5.	Brisanje proizvoda              |\n");
 	printf("| 6.	Izlaz iz programa               |\n");
+	printf("| 7.    Azuriranje proizvoda            |\n");
 
 	scanf("%d", &izbor);
 	if (izbor != 1)
@@ -111,6 +111,17 @@ int menu()
 		return 999;
 		break;
 
+	case AZURIRANJE_PROIZVODA:
+		polje = (PROIZVOD*)ucitavanjeProizvoda();
+		if (brojProizvoda == 0)
+		{
+			printf("Nema proizvoda!\n");
+		}
+		azuriranjeProizvoda(polje);
+
+
+		break;
+
 	default:
 
 		printf("Pogresan unos! Pokusajte ponovno\n");
@@ -118,6 +129,59 @@ int menu()
 	}
 	return izbor;
 }
+
+void azuriranjeProizvoda(PROIZVOD* polje) {
+	int idZaAzuriranje, brojac = 0;
+
+	printf("Unesite ID proizvoda kojeg zelite azurirati:\n");
+	ispis(polje);  
+	scanf("%d", &idZaAzuriranje);
+
+	for (i = 0; i < brojProizvoda; i++) {
+		if ((polje + i)->id == idZaAzuriranje) {
+			printf("Proizvod pronaden! Unesite nove podatke:\n");
+
+			getchar();  
+			printf("Unesite novu marku: ");
+			scanf("%24[^\n]", (polje + i)->marka);
+			getchar();
+
+			printf("Unesite novo ime proizvoda: ");
+			scanf("%30[^\n]", (polje + i)->imeProizvoda);
+			getchar();
+
+			printf("Unesite novu cijenu proizvoda: ");
+			if (scanf("%d", &(polje + i)->cijena) != 1) {
+				printf("Neispravan unos cijene.\n");
+				return;
+			}
+			getchar();
+
+			brojac++;
+			break;
+		}
+	}
+
+	if (brojac == 0) {
+		printf("Proizvod s tim ID-om nije pronaden.\n");
+	}
+	else {
+		// Snimanje ažuriranih podataka nazad u datoteku
+		FILE* fp = fopen("proizvodi.bin", "rb+");
+		if (fp == NULL) {
+			perror("Azuriranje");
+			return;
+		}
+
+		fseek(fp, sizeof(int), SEEK_SET);
+		fwrite(polje, sizeof(PROIZVOD), brojProizvoda, fp);
+		fclose(fp);
+
+		printf("Proizvod uspjesno azuriran.\n");
+	}
+}
+
+
 
 void dodavanjeProizvoda()
 {
@@ -283,9 +347,14 @@ void kreiranjeDat()
 
 int generiranjeID()
 {
-	static int brojac = 1;
-	int ID = brojac;
+	static int brojac = 0;
+	time_t trenutnoVrijeme;
+
+	time(&trenutnoVrijeme);
+
+	int ID = (int)trenutnoVrijeme + brojac;
 	brojac++;
+
 	return ID;
 }
 
@@ -299,8 +368,7 @@ void* ucitavanjeProizvoda()
 
 	fread(&brojProizvoda, sizeof(int), 1, fp);
 
-	// koristiti dinamicko zauzimanje memorije za bilo koji tip podatka...
-	// koristiti funkcije malloc(), calloc(), realloc(), free()
+
 	PROIZVOD* polje = NULL;
 	polje = (PROIZVOD*)calloc(brojProizvoda, sizeof(PROIZVOD));
 	if (polje == NULL)
